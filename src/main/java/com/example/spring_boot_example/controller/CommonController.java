@@ -7,6 +7,7 @@ import com.example.spring_boot_example.service.RecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,4 +55,5 @@ public class CommonController {
         recordService.deleteRecord(parameters.getId());
         return "redirect:/home" + (!parameters.getFilter().isBlank() && parameters.getFilter() != null ? "?filter=" + parameters.getFilter() : "");
     }
+
 }

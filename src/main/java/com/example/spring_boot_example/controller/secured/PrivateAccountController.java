@@ -3,8 +3,10 @@ package com.example.spring_boot_example.controller.secured;
 
 import com.example.spring_boot_example.controller.QueryParameters;
 import com.example.spring_boot_example.entity.RecordStatus;
+import com.example.spring_boot_example.entity.User;
 import com.example.spring_boot_example.entity.dto.RecordsContainerDto;
 import com.example.spring_boot_example.service.RecordService;
+import com.example.spring_boot_example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,17 +16,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/account")
 public class PrivateAccountController {
 
+    private final UserService userService;
     private final RecordService recordService;
 
     @Autowired
-    public PrivateAccountController(RecordService recordService){
+    public PrivateAccountController(RecordService recordService, UserService userService){
+        this.userService = userService;
         this.recordService = recordService;
     }
 
     @GetMapping
     public String getMainPage(Model model, @RequestParam(name="filter", required = false) String filterMode){
         RecordsContainerDto container = recordService.findAllRecords(filterMode);
-
+        User user = userService.getCurrentUser();
+        model.addAttribute("userName", user.getName());
         model.addAttribute("numberOfDoneRecords", container.getNumberOfDoneRecords());
         model.addAttribute("numberOfActiveRecords", container.getNumberOfActiveRecords());
         model.addAttribute("records", container.getRecords());

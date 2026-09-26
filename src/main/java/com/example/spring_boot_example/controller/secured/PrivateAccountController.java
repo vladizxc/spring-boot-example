@@ -7,6 +7,8 @@ import com.example.spring_boot_example.entity.User;
 import com.example.spring_boot_example.entity.dto.RecordsContainerDto;
 import com.example.spring_boot_example.service.RecordService;
 import com.example.spring_boot_example.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +28,16 @@ public class PrivateAccountController {
     }
 
     @GetMapping
-    public String getMainPage(Model model, @RequestParam(name="filter", required = false) String filterMode){
+    public String getMainPage(HttpServletRequest request, Model model, @RequestParam(name="filter", required = false) String filterMode){
+        HttpSession session = request.getSession();
+        Object counter = session.getAttribute("visitsCounter");
+        if (counter != null){
+            model.addAttribute("visitsCounter", (Integer) counter);
+            session.setAttribute("visitsCounter", ((Integer) counter) + 1);
+        } else {
+            model.addAttribute("visitsCounter", 0);
+            session.setAttribute("visitsCounter", 1);
+        }
         RecordsContainerDto container = recordService.findAllRecords(filterMode);
         User user = userService.getCurrentUser();
         model.addAttribute("userName", user.getName());

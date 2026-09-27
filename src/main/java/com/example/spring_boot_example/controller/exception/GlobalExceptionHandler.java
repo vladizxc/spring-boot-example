@@ -14,17 +14,11 @@ public class GlobalExceptionHandler implements ErrorController {
 
     @RequestMapping("/error")
     public String redirectToSpecificErrorPage(HttpServletResponse response) {
-        switch (HttpStatus.valueOf(response.getStatus())){
-            case FORBIDDEN -> {
-                return "redirect:/error/403";
-            }
-            case NOT_FOUND -> {
-                return "redirect:/error/404";
-            }
-            default -> {
-                return "redirect:/error/500";
-            }
-        }
+        return switch (HttpStatus.valueOf(response.getStatus())) {
+            case FORBIDDEN -> "redirect:/error/403";
+            case NOT_FOUND -> "redirect:/error/404";
+            default -> "redirect:/error/500";
+        };
     }
 
     @RequestMapping("/error/500")

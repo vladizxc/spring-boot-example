@@ -94,4 +94,16 @@ public class User {
                 ", role=" + role +
                 '}';
     }
+
+    public boolean isSimpleUser(){
+        return this.role == UserRole.USER;
+    }
+
+    public boolean isAdmin(){
+        return this.role == UserRole.ADMIN;
+    }
+
+    public boolean isSuperAdmin(){
+        return this.role == UserRole.SUPER_ADMIN;
+    }
 }
